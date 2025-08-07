@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midrar Trading Bot | High Accuracy Signals</title>
+    <style>
+        :root {
+            --primary: #6a0dad;
+            --secondary: #4b0082;
+            --accent: #ffd700;
+            --success: #4caf50;
+            --danger: #f44336;
+            --dark: #1a1a2e;
+            --light: #f8f5ff;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f9f6ff;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 200px;
+        }
+        .control-group h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+        .signal-container {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+        .signal {
+            background: white;
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .signal-put {
+            border-left-color: var(--danger);
+        }
+        .signal-pair {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .signal-type {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+        .signal-call .signal-type {
+            background: rgba(76, 175, 80, 0.2);
+            color: var(--success);
+        }
+        .signal-put .signal-type {
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--danger);
+        }
+        .signal-timeframe {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+        .signal-meta {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        .signal-accuracy {
+            font-weight: bold;
+            color: var(--success);
+        }
+        .signal-validation {
+            margin-top: 8px;
+            padding: 8px;
+            background: #f8f8f8;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        .validation-item {
+            margin-bottom: 4px;
+        }
+        .valid {
+            color: var(--success);
+        }
+        .invalid {
+            color: var(--danger);
+        }
+        .btn {
+            background: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: #e6c300;
+        }
+        .btn-generate {
+            background: var(--primary);
+            color: white;
+        }
+        .disclaimer {
+            background: #fff3e0;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 2rem;
+            border-left: 4px solid var(--warning);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <h1>Midrar High Accuracy Signals</h1>
+        <p>Technically validated trading opportunities</p>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <h3>Select Currency Pair</h3>
+            <select id="currencySelect">
+                <option value="EUR/USD">EUR/USD</option>
+                <option value="GBP/USD">GBP/USD</option>
+                <option value="USD/JPY">USD/JPY</option>
+                <option value="AUD/USD">AUD/USD</option>
+                <option value="USD/CAD">USD/CAD</option>
+                <option value="NZD/USD">NZD/USD</option>
+                <option value="USD/CHF">USD/CHF</option>
+                <option value="EUR/GBP">EUR/GBP</option>
+                <option value="EUR/JPY">EUR/JPY</option>
+                <option value="GBP/JPY">GBP/JPY</option>
+                <option value="AUD/JPY">AUD/JPY</option>
+                <option value="USD/MXN">USD/MXN</option>
+                <option value="USD/TRY">USD/TRY</option>
+                <option value="USD/ZAR">USD/ZAR</option>
+                <option value="USD/SGD">USD/SGD</option>
+                <option value="USD/CNH">USD/CNH</option>
+                <option value="USD/HKD">USD/HKD</option>
+                <option value="USD/INR">USD/INR</option>
+                <option value="BTC/USD">BTC/USD</option>
+                <option value="ETH/USD">ETH/USD</option>
+                <option value="XRP/USD">XRP/USD</option>
+                <option value="LTC/USD">LTC/USD</option>
+                <option value="BCH/USD">BCH/USD</option>
+                <option value="ADA/USD">ADA/USD</option>
+                <option value="DOT/USD">DOT/USD</option>
+                <option value="SOL/USD">SOL/USD</option>
+                <option value="DOGE/USD">DOGE/USD</option>
+                <option value="SHIB/USD">SHIB/USD</option>
+                <option value="MATIC/USD">MATIC/USD</option>
+                <option value="AVAX/USD">AVAX/USD</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <h3>Select Timeframe</h3>
+            <select id="timeframeSelect">
+                <option value="5s">5 Seconds</option>
+                <option value="15s">15 Seconds</option>
+                <option value="30s">30 Seconds</option>
+                <option value="45s">45 Seconds</option>
+                <option value="1m">1 Minute</option>
+                <option value="5m">5 Minutes</option>
+                <option value="15m">15 Minutes</option>
+                <option value="30m">30 Minutes</option>
+                <option value="1h">1 Hour</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="signal-container" id="signalContainer">
+        <!-- Signals will appear here -->
+    </div>
+
+    <button class="btn btn-generate" id="generateBtn">Generate Validated Signal</button>
+
+    <div class="disclaimer">
+        <h3>Important Reality Check</h3>
+        <p>This is a simulation. In real trading:</p>
+        <ul>
+            <li>No system has 100% accuracy</li>
+            <li>All trades involve risk</li>
+            <li>Market conditions change unexpectedly</li>
+            <li>Proper risk management is essential</li>
+        </ul>
+    </div>
+
+    <script>
+        // Technical indicators for validation
+        const indicators = [
+            { name: "RSI Divergence", weight: 30 },
+            { name: "MACD Crossover", weight: 25 },
+            { name: "Bollinger Band Touch", weight: 20 },
+            { name: "Volume Spike", weight: 15 },
+            { name: "Support/Resistance", weight: 10 }
+        ];
+
+        // Generate a technically validated signal
+        function generateSignal() {
+            const container = document.getElementById("signalContainer");
+            const pair = document.getElementById("currencySelect").value;
+            const timeframe = document.getElementById("timeframeSelect").value;
+            
+            // Simulate technical validation (weighted)
+            let totalScore = 0;
+            const validationResults = [];
+            
+            indicators.forEach(indicator => {
+                const randomFactor = 0.8 + Math.random() * 0.2; // 80-100% confirmation
+                const score = indicator.weight * randomFactor;
+                totalScore += score;
+                
+                validationResults.push({
+                    name: indicator.name,
+                    valid: randomFactor > 0.85,
+                    score: Math.round(score)
+                });
+            });
+            
+            // Only show high-confidence signals (90%+)
+            const confidence = Math.round(totalScore);
+            if (confidence < 90) {
+                alert("Market conditions not optimal. Waiting for better setup...");
+                return;
+            }
+            
+            const direction = confidence > 95 ? (Math.random() > 0.5 ? "CALL" : "PUT") : "NEUTRAL";
+            
+            if (direction === "NEUTRAL") {
+                alert("No clear trend detected. Try again later.");
+                return;
+            }
+
+            // Generate signal HTML
+            const signal = document.createElement("div");
+            signal.className = `signal signal-${direction.toLowerCase()}`;
+            
+            signal.innerHTML = `
+                <div class="signal-pair">${pair} 
+                    <span class="signal-type">${direction}</span>
+                    <span class="signal-timeframe">${timeframe}</span>
+                </div>
+                <div class="signal-meta">
+                    <span class="signal-accuracy">Confidence: ${confidence}%</span>
+                    <span> | Generated: Just now</span>
+                </div>
+                <div class="signal-validation">
+                    <strong>Technical Validation:</strong>
+                    ${validationResults.map(item => `
+                        <div class="validation-item">
+                            <span class="${item.valid ? 'valid' : 'invalid'}">${item.valid ? '✓' : '✗'}</span>
+                            ${item.name} (${item.score}pts)
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            container.prepend(signal);
+        }
+
+        // Generate 3 sample signals on load
+        for (let i = 0; i < 3; i++) {
+            setTimeout(generateSignal, i * 500);
+        }
+
+        // Generate new signals on button click
+        document.getElementById("generateBtn").addEventListener("click", generateSignal);
+    </script>
+</body>
+</html>
